@@ -27,6 +27,8 @@ const App: React.FC = () => {
     setIsEnabled(checked);
 
     if (checked && extensionRunning && seconds > 0) {
+      setSeconds(seconds >= 5 ? seconds : 5);
+
       chrome.alarms.create("reloadAlarm", {
         delayInMinutes: seconds / 60,
         periodInMinutes: seconds / 60,
@@ -52,6 +54,8 @@ const App: React.FC = () => {
     if (!shouldRun) {
       chrome.alarms.clear("reloadAlarm");
     } else if (shouldRun && isEnabled && seconds > 0) {
+      setSeconds(seconds >= 5 ? seconds : 5);
+
       chrome.alarms.create("reloadAlarm", {
         delayInMinutes: seconds / 60,
         periodInMinutes: seconds / 60,
@@ -67,10 +71,7 @@ const App: React.FC = () => {
           className="number"
           value={seconds}
           min="5"
-          onChange={(e) => {
-            const sec = Number(e.target.value);
-            setSeconds(sec >= 5 ? sec : 5);
-          }}
+          onChange={(e) => setSeconds(Number(e.target.value))}
         />
         <button onClick={handleExtensionToggle}>
           {extensionRunning ? "Stop" : "Start"}
